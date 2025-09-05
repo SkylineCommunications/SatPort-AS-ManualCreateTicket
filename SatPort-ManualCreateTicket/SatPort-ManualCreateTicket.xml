@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<DMSScript options="272" xmlns="http://www.skyline.be/automation">
+	<Name>SatPort-ManualCreateTicket</Name>
+	<Description></Description>
+	<Type>Automation</Type>
+	<Author>BHO</Author>
+	<CheckSets>FALSE</CheckSets>
+	<Folder></Folder>
+
+	<Protocols>
+	</Protocols>
+
+	<Memory>
+	</Memory>
+
+	<Parameters>
+		<ScriptParameter id="1" type="string" values="">
+			<Description>DmaID</Description>
+		</ScriptParameter>
+		<ScriptParameter id="2" type="string" values="">
+			<Description>ElementID</Description>
+		</ScriptParameter>
+		<ScriptParameter id="3" type="string" values="">
+			<Description>AlarmID</Description>
+		</ScriptParameter>
+	</Parameters>
+
+	<Script>
+		<Exe id="4" type="csharp">
+			<Value><![CDATA[[Project:SatPort-ManualCreateTicket]]]></Value>
+			<!--<Param type="debug">true</Param>-->
+			<Message></Message>
+		</Exe>
+	</Script>
+</DMSScript>
