@@ -1,7 +1,6 @@
-﻿namespace Context
+﻿namespace Skyline.Automation.SatPort.Context
 {
 	using System;
-	using Newtonsoft.Json;
 	using Skyline.DataMiner.Automation;
 	using Skyline.DataMiner.Net.Messages;
 

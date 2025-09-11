@@ -1,4 +1,4 @@
-﻿namespace Context
+﻿namespace Skyline.Automation.SatPort.Context
 {
 	using Skyline.DataMiner.Automation;
 	using Skyline.DataMiner.Net.Messages;

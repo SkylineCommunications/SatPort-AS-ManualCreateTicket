@@ -45,29 +45,30 @@ Revision History:
 
 DATE		VERSION		AUTHOR			COMMENTS
 
-11/08/2025	1.0.0.1		BHO, Skyline	Initial version
+11/09/2025	1.0.0.1		JSL, Skyline	Initial version
 ****************************************************************************
 */
 
 namespace SatPortManualCreateTicket
 {
 	using System;
-	using System.Linq;
-	using Context;
-	using Newtonsoft.Json;
-	using SatPort_ManualCreateTicket;
+	using Skyline.Automation.SatPort.Context;
+	using Skyline.Automation.SatPort.Helpers;
+	using Skyline.Automation.SatPort.IAS;
 	using Skyline.DataMiner.Automation;
-	using Skyline.DataMiner.Net.Messages;
-	using Skyline.DataMiner.Net.Messages.SLDataGateway;
+	using Skyline.DataMiner.Core.SRM.Utils.Automation.Exceptions;
 	using Skyline.DataMiner.SDM.Ticketing;
-	using Skyline.DataMiner.SDM.Ticketing.Models;
-	using TicketType = Skyline.DataMiner.SDM.Ticketing.Models.TicketType;
+	using Skyline.DataMiner.Utils.InteractiveAutomationScript;
 
 	/// <summary>
 	/// Represents a DataMiner Automation script.
+	/// engine.ShowUI();.
 	/// </summary>
 	public class Script
 	{
+		private InteractiveController controller;
+		private TicketWizard ticketWizard;
+
 		/// <summary>
 		/// The script entry point.
 		/// </summary>
@@ -76,10 +77,12 @@ namespace SatPortManualCreateTicket
 		{
 			try
 			{
-				// Initialize script context
-				var scriptContext = new ScriptContext(engine);
-
-				RunSafe(scriptContext);
+				InitializeHelpers(engine, new ScriptContext(engine));
+				RunSafe();
+			}
+			catch (CloseUserInteractionException)
+			{
+				// All good
 			}
 			catch (ScriptAbortException)
 			{
@@ -105,48 +108,38 @@ namespace SatPortManualCreateTicket
 			catch (Exception e)
 			{
 				engine.ExitFail("Run|Something went wrong: " + e);
+				ShowExceptionDialog(engine, e);
 			}
 		}
 
-		private void RunSafe(IScriptContext context)
+		private void ShowExceptionDialog(IEngine engine, Exception exception)
 		{
-			var userConnection = context.Engine.GetUserConnection();
+			ExceptionDialog exceptionDialog = new ExceptionDialog(engine, new SatPortException(exception.Message));
+			exceptionDialog.OkButton.Pressed += (sender, args) => engine.ExitSuccess($"Something went wrong. Reason: {exception.Message}");
 
+			controller.ShowDialog(exceptionDialog);
+		}
+
+		private void InitializeHelpers(IEngine engine, ScriptContext scriptContext)
+		{
+			engine.SetFlag(RunTimeFlags.NoKeyCaching);
+			engine.Timeout = TimeSpan.FromHours(10);
+
+			if (scriptContext.AlarmEvent == null)
+			{
+				throw new ArgumentNullException(nameof(scriptContext.AlarmEvent), "Alarm message cannot be null.");
+			}
+
+			var userConnection = engine.GetUserConnection();
 			var ticketingApiHelper = new TicketingApiHelper(userConnection);
-			var ticketType = PrepareTicketType(ticketingApiHelper);
 
-			var dmaTicket = new DmaTicket(context.AlarmEvent)
-			{
-				Type = ticketType,
-			};
-
-			ticketingApiHelper.Tickets.Create(dmaTicket);
+			controller = new InteractiveController(engine);
+			ticketWizard = new TicketWizard(scriptContext, ticketingApiHelper);
 		}
 
-		/// <summary>
-		/// Gets the relevant ticket type. TODO: deduce from alarm, element, environment, parameter, etc.
-		/// </summary>
-		/// <param name="helper">Ticketing API Helper.</param>
-		/// <returns>The <see cref="TicketType"/> to assign to a new ticket.</returns>
-		private TicketType PrepareTicketType(TicketingApiHelper helper)
+		private void RunSafe()
 		{
-			var unclassifiedIssueTicketType = new TicketType
-			{
-				Guid = Guid.NewGuid(),
-				Name = "Unclassified Issue",
-			};
-			var ticketTypeFilter = TicketTypeExposers.Name.Equal(unclassifiedIssueTicketType.Name);
-
-			var ticketType = helper.TicketTypes.Read(ticketTypeFilter).FirstOrDefault();
-			if (ticketType is null)
-			{
-				helper.TicketTypes.Create(unclassifiedIssueTicketType);
-				return unclassifiedIssueTicketType;
-			}
-			else
-			{
-				return ticketType;
-			}
+			controller.ShowDialog(ticketWizard.View);
 		}
 	}
 }
