@@ -3,9 +3,9 @@
 	<Name>SatPort-ManualCreateTicket</Name>
 	<Description></Description>
 	<Type>Automation</Type>
-	<Author>BHO</Author>
+	<Author>JSL</Author>
 	<CheckSets>FALSE</CheckSets>
-	<Folder></Folder>
+	<Folder>SatPort/IAS</Folder>
 
 	<Protocols>
 	</Protocols>

@@ -3,7 +3,6 @@
 	using System;
 	using System.Linq;
 	using Skyline.Automation.SatPort.IAS.Interfaces;
-	using Skyline.DataMiner.Net.Messages;
 	using Skyline.DataMiner.SDM;
 	using Skyline.DataMiner.SDM.Ticketing.Models;
 	using TicketType = Skyline.DataMiner.SDM.Ticketing.Models.TicketType;
@@ -19,6 +18,7 @@
 			this.model = model;
 
 			InitPresenterEvents();
+			LoadFromModel();
 		}
 
 		public event EventHandler<EventArgs> Cancel;
@@ -29,8 +29,8 @@
 		{
 			var alarmMessage = model.ScriptContext.AlarmEvent;
 
-			view.Name.Text = $"{alarmMessage}@{alarmMessage.Value}";
-			view.Description.Text = $"{alarmMessage.ElementName} - {model.Ticket.Name}";
+			view.Name.Text = $"{alarmMessage.ParameterName}@{alarmMessage.Value}";
+			view.Description.Text = $"{alarmMessage.ElementName} - {view.Name.Text}";
 			view.TicketType.SetOptions(model.TicketTypes.Select(x => x.Name));
 			view.Impact.SetOptions(Enum.GetNames(typeof(TicketSeverity)));
 		}
@@ -67,6 +67,7 @@
 
 		private void OnCreateButtonPressed(object sender, EventArgs e)
 		{
+			StoreToModel();
 			Create?.Invoke(this, EventArgs.Empty);
 		}
 	}

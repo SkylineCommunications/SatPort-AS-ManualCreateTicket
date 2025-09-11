@@ -10,7 +10,7 @@
 		public TicketView(IEngine engine) : base(engine)
 		{
 			Title = "Create new ticket";
-			MinWidth = 700;
+			MinWidth = 300;
 
 			InitializeTextBox();
 			InitializeDropDown();
@@ -37,7 +37,7 @@
 		{
 			Name = new TextBox { Width = 300, Height = 30 };
 			Description = new TextBox { Width = 300, Height = 30 };
-			WorkNotes = new TextBox { Width = 300, Height = 30 };
+			WorkNotes = new TextBox { Width = 300, Height = 300, IsMultiline = true };
 		}
 
 		private void InitializeDropDown()
@@ -68,11 +68,13 @@
 			var impactLabel = new Label("Impact") { MinWidth = 200, Height = 30 };
 			section.AppendWidgets(impactLabel, Impact);
 
-			var workNotesLabel = new Label("Notes") { MinWidth = 200, Height = 30 };
+			var workNotesLabel = new Label("Work Notes") { MinWidth = 200, Height = 30 };
 			section.AppendWidgets(workNotesLabel, WorkNotes);
 
 			section.AppendWidgets(new Widget[] { new WhiteSpace() });
 			section.AppendWidgets(CancelButton, CreateButton);
+
+			this.AddSection(section, 0, 0);
 		}
 	}
 }
