@@ -33,6 +33,8 @@
 			view.Description.Text = $"{alarmMessage.ElementName} - {view.Name.Text}";
 			view.TicketType.SetOptions(model.TicketTypes.Select(x => x.Name));
 			view.Impact.SetOptions(Enum.GetNames(typeof(TicketSeverity)));
+			view.RequestResolutionDate.DateTime = DateTime.Now.AddDays(7);
+			view.ExpectedResolutionDate.DateTime = DateTime.Now.AddDays(3);
 		}
 
 		public void StoreToModel()
@@ -41,6 +43,8 @@
 			model.Ticket.Description = view.Description.Text;
 			model.Ticket.Type = new SdmObjectReference<TicketType>(model.TicketTypes.First(t => t.Name == view.TicketType.Selected).Guid);
 			model.Ticket.Severity = (TicketSeverity)Enum.Parse(typeof(TicketSeverity), view.Impact.Selected);
+			model.Ticket.RequestedResolutionDate = view.RequestResolutionDate.DateTime;
+			model.Ticket.ExpectedResolutionDate = view.ExpectedResolutionDate.DateTime;
 
 			if(!string.IsNullOrWhiteSpace(view.WorkNotes.Text))
 			{

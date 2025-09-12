@@ -1,5 +1,6 @@
 ﻿namespace Skyline.Automation.SatPort.IAS
 {
+	using System;
 	using Skyline.Automation.SatPort.IAS.IasExtensions;
 	using Skyline.Automation.SatPort.IAS.Interfaces;
 	using Skyline.DataMiner.Automation;
@@ -13,6 +14,7 @@
 			MinWidth = 300;
 
 			InitializeTextBox();
+			InitializeDateTimePicker();
 			InitializeDropDown();
 			InitializeButtons();
 
@@ -29,6 +31,10 @@
 
 		public TextBox WorkNotes { get; private set; }
 
+		public DateTimePicker RequestResolutionDate { get; private set; }
+
+		public DateTimePicker ExpectedResolutionDate { get; private set; }
+
 		public Button CreateButton { get; private set; }
 
 		public Button CancelButton { get; private set; }
@@ -38,6 +44,12 @@
 			Name = new TextBox { Width = 300, Height = 30 };
 			Description = new TextBox { Width = 300, Height = 30 };
 			WorkNotes = new TextBox { Width = 300, Height = 300, IsMultiline = true };
+		}
+
+		private void InitializeDateTimePicker()
+		{
+			RequestResolutionDate = new DateTimePicker { Width = 300, Kind = DateTimeKind.Unspecified, Height = 30 };
+			ExpectedResolutionDate = new DateTimePicker { Width = 300, Kind = DateTimeKind.Unspecified, Height = 30 };
 		}
 
 		private void InitializeDropDown()
@@ -67,6 +79,12 @@
 
 			var impactLabel = new Label("Impact") { MinWidth = 200, Height = 30 };
 			section.AppendWidgets(impactLabel, Impact);
+
+			var requestResolutionDateLabel = new Label("Request Resolution Date") { MinWidth = 200, Height = 30 };
+			section.AppendWidgets(requestResolutionDateLabel, RequestResolutionDate);
+
+			var expectedResolutionDateLabel = new Label("Expected Resolution Date") { MinWidth = 200, Height = 30 };
+			section.AppendWidgets(expectedResolutionDateLabel, ExpectedResolutionDate);
 
 			var workNotesLabel = new Label("Work Notes") { MinWidth = 200, Height = 30 };
 			section.AppendWidgets(workNotesLabel, WorkNotes);

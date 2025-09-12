@@ -14,6 +14,10 @@
 
 		TextBox WorkNotes { get; }
 
+		DateTimePicker RequestResolutionDate { get; }
+
+		DateTimePicker ExpectedResolutionDate { get; }
+
 		Button CreateButton { get; }
 
 		Button CancelButton { get; }
