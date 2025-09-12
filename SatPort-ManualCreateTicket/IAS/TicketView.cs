@@ -11,7 +11,7 @@
 		public TicketView(IEngine engine) : base(engine)
 		{
 			Title = "Create new ticket";
-			MinWidth = 300;
+			MinWidth = 500;
 
 			InitializeTextBox();
 			InitializeDateTimePicker();
@@ -43,7 +43,7 @@
 		{
 			Name = new TextBox { Width = 300, Height = 30 };
 			Description = new TextBox { Width = 300, Height = 30 };
-			WorkNotes = new TextBox { Width = 300, Height = 300, IsMultiline = true };
+			WorkNotes = new TextBox { Width = 300, Height = 200, IsMultiline = true };
 		}
 
 		private void InitializeDateTimePicker()
