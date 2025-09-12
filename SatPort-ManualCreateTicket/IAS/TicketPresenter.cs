@@ -42,8 +42,6 @@
 			model.Ticket.Type = new SdmObjectReference<TicketType>(model.TicketTypes.First(t => t.Name == view.TicketType.Selected).Guid);
 			model.Ticket.Severity = (TicketSeverity)Enum.Parse(typeof(TicketSeverity), view.Impact.Selected);
 
-			model.Helper.Tickets.Create(model.Ticket);
-
 			if(!string.IsNullOrWhiteSpace(view.WorkNotes.Text))
 			{
 				model.Helper.Notes.Create(new TicketNote
@@ -52,6 +50,8 @@
 					Ticket = model.Ticket,
 				});
 			}
+
+			model.Helper.Tickets.Create(model.Ticket);
 		}
 
 		private void InitPresenterEvents()
