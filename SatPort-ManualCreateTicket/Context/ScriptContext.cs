@@ -22,6 +22,36 @@
 
 		public AlarmEventMessage AlarmEvent { get; private set; }
 
+		public void EditAlarmProperty(string propertyName, string propertyValue)
+		{
+			var propertyArray = new PSA
+			{
+				Psa = new[]
+				{
+					new SA
+					{
+						Sa = new[] { propertyName, "read-write", propertyValue ?? "Unknown" },
+					},
+				},
+			};
+
+			var infoMessage = new Skyline.DataMiner.Net.Messages.Advanced.SetDataMinerInfoMessage
+			{
+				bInfo1 = Int32.MaxValue,
+				bInfo2 = Int32.MaxValue,
+				DataMinerID = DataMinerId,
+				ElementID = -1,
+				HostingDataMinerID = DataMinerId,
+				IInfo1 = Int32.MaxValue,
+				IInfo2 = Int32.MaxValue,
+				Psa2 = propertyArray,
+				What = (int)NotifyType.EditProperty,
+				StrInfo1 = $"alarm:{AlarmId}:{DataMinerId}:{ElementId}",
+			};
+
+			Engine.SendSLNetMessage(infoMessage);
+		}
+
 		private void InitializeContext(Engine engine)
 		{
 			DataMinerId = Convert.ToInt32(engine.GetScriptParam("DmaID")?.Value);

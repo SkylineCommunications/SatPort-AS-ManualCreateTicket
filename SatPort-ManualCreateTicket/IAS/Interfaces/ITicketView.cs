@@ -4,7 +4,7 @@
 
 	public interface ITicketView
 	{
-		TextBox Name { get; }
+		TextBox ShortDescription { get; }
 
 		TextBox Description { get; }
 
@@ -13,10 +13,6 @@
 		DropDown Impact { get; }
 
 		TextBox WorkNotes { get; }
-
-		DateTimePicker RequestResolutionDate { get; }
-
-		DateTimePicker ExpectedResolutionDate { get; }
 
 		Button CreateButton { get; }
 
