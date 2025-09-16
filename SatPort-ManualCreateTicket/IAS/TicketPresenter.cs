@@ -50,7 +50,7 @@
 			CreateAffectedResource();
 
 			model.Helper.Tickets.Create(model.Ticket);
-			model.ScriptContext.EditAlarmProperty("TicketID", model.Ticket.ID);
+			model.ScriptContext.EditAlarmProperty("Ticket ID", model.Ticket.ID);
 		}
 
 		private TicketSeverity ConvertImpactToSeverity()
@@ -95,7 +95,7 @@
 			model.Helper.AffectedResources.Create(new TicketAffectedResource
 			{
 				Id = $"{alarmMessage.DataMinerID}/{alarmMessage.ElementID}/{alarmMessage.AlarmID}",
-				Name = $"{alarmMessage.ElementName} - {alarmMessage.Description}",
+				Name = $"{alarmMessage.ElementName}",
 				Type = AffectedResourceType.Alarm,
 				State = alarmMessage.Status,
 				Ticket = model.Ticket,
